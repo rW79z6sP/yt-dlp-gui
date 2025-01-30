@@ -8,7 +8,7 @@ Public Class base
         Return Convert.ToBase64String(hash)
     End Function
 
-    Dim key As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("software\yt-dlp-gui")
+    Dim key As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\yt-dlp-gui")
 
     Protected Overrides ReadOnly Property CreateParams As CreateParams
         Get
@@ -20,9 +20,10 @@ Public Class base
 
     Private Function CheckTOSState()
         Try
-            Dim url As String = "https://raw.githubusercontent.com/rW79z6sP/yt-dlp-gui/refs/heads/main/tos.txt"
+            Dim url As String = "https://raw.githubusercontent.com/rW79z6sP/yt-dlp-gui/refs/heads/master/tos.txt"
             Dim webClient As New System.Net.WebClient()
             Dim currentTermsOfService As String = webClient.DownloadString(url)
+            currentTermsOfService = currentTermsOfService.Replace(vbCrLf, vbLf).Replace(vbLf, vbCrLf)
             Dim currentHash As String = CalculateHash(currentTermsOfService)
             Dim storedHash As String = key.GetValue("TermsOfServiceHash")
             If currentHash <> storedHash Then
